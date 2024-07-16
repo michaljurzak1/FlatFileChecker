@@ -16,17 +16,16 @@ namespace PlikPlaskiDownload
     {
         private static DateTime polish_local_time;
         private static string format = ".7z";
-        private static string save_path = "20240716.7z"; // temporary - to delete
-        //private static string save_path = "trimmed_json.json"; // temporary - to delete
+        private static string save_path;
 
 
         static void Main(string[] args)
         {
             polish_local_time = DateTime.Now;
-            //save_path = Download_Flat_File(Get_Flat_File_Url());
-            //Console.WriteLine(save_path.Substring(0, save_path.IndexOf(".")));
+            save_path = Download_Flat_File(Get_Flat_File_Url());
             var flatfile = Load_json(save_path);
 
+            
             if (flatfile == null)
             {
                 Console.WriteLine("Failed to load json");
@@ -37,27 +36,32 @@ namespace PlikPlaskiDownload
                 Console.WriteLine("Loaded json");
             }
 
-            Console.WriteLine(flatfile.naglowek.schemat);
+            Console.WriteLine(flatfile.naglowek.schemat); // testowe, sprawdzenie czy parsuje json
 
         }
+
+        #region DownloadFile
 
         private static string Get_Flat_File_Url(string prefix_url = "https://plikplaski.mf.gov.pl/pliki//")
         {
             return prefix_url + polish_local_time.ToString("yyyyMMdd") + format;
         }
-        
+
+
         private static string Download_Flat_File(string url)
         {
             var uri = new Uri(url);
 
             var save_path = string.Format("./{0}{1}", polish_local_time.ToString("yyyyMMdd"), format);
-            Console.WriteLine(uri);
             using (var client = new HttpClient())
             {
+                // check internet connection, else either time out or wait
+                // check if url exists
                 using (var s = client.GetStreamAsync(uri))
                 {
                     using (var fs = new FileStream(save_path, FileMode.OpenOrCreate))
                     {
+                        // nieznany host
                         s.Result.CopyTo(fs);
                         Console.WriteLine("Saved result in " + save_path);
                         return save_path;
@@ -66,11 +70,15 @@ namespace PlikPlaskiDownload
             }
         }
 
+        #endregion DownloadFile
+
+        #region FlatFile from Json
         public static FlatFile Load_json(string save_path)
         {
             string save_name = save_path.Substring(0, save_path.IndexOf(".")) + ".json";
             Console.WriteLine(save_name);
             
+            // change to format (.7z)
             if (save_path.EndsWith(".7z")){
                 ExtractFile(save_path);
             }
@@ -117,6 +125,7 @@ namespace PlikPlaskiDownload
 
         public static void ExtractFile(string sourceArchive, string destination = ".")
         {
+            // check if it exists, else return to user that 7z is needed to install or manually extract
             string zPath = "7za.exe"; //add to proj and set CopyToOuputDir
             try
             {
@@ -133,6 +142,10 @@ namespace PlikPlaskiDownload
                 Console.WriteLine(Ex.Message);
             }
         }
+
+        #endregion FlatFile from Json
+
+
 
     }
 }
