@@ -18,11 +18,20 @@ namespace PlikPlaskiDownload
         
         static void Main(string[] args)
         {
+            DataSourceFactory factory = new DataSourceFactory(new SqliteDB());
+
+            if (!factory.CheckFlatFileAvailable(DateTime.Now))
+            {
+                Console.WriteLine("No new data available, exiting.");
+                Environment.Exit(0);
+            }
+
             DownloadLogic logic = new DownloadLogic(format);
 
             FlatFile flatfile = logic.Invoke_Logic();
-            
-            Console.WriteLine(flatfile.naglowek.schemat); // testowe, sprawdzenie czy parsuje json
+            factory.SaveFlatFile(flatfile);
+
+            //Console.WriteLine(flatfile.naglowek.schemat); // testowe, sprawdzenie czy parsuje json
 
         }
     }
