@@ -57,6 +57,7 @@ namespace PlikPlaskiDownload
             #endregion CheckSha512
         }
 
+        #region sha512 logic
         public static string CheckSha512(string date, string nip, string nrb)
         {
             using (SHA512 sha512 = SHA512.Create())
@@ -86,5 +87,7 @@ namespace PlikPlaskiDownload
             }
             return builder.ToString();
         }
+
+        #endregion sha512 logic
     }
 }
