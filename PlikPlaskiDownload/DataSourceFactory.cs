@@ -23,7 +23,14 @@ namespace PlikPlaskiDownload
         public bool CheckFlatFileAvailable(DateTime now)
         {
             // Ensure one minute delay after 00:00
-            return now.Date > Get_Last_date().AddMinutes(1);
+            try
+            {
+                var last_date = now > Get_Last_date().AddMinutes(1);
+                return last_date;
+            } catch (DataException e)
+            {
+                return true;
+            }
         }
 
         public void SaveFlatFile(Pobieranie.FlatFile flatfile)
@@ -110,6 +117,10 @@ namespace PlikPlaskiDownload
         {
             // check last date from column: dataGenerowaniaDanych (20240719)
             DataTable dt = connection.ExecuteQuery("SELECT generatingDate FROM Dane WHERE deleted = 0 ORDER BY id DESC LIMIT 1");
+            if (dt.Rows.Count == 0)
+            {
+                throw new DataException("No data in DB");
+            }
             string? date = dt.Rows[0]["generatingDate"].ToString();
             if (date == null)
             {

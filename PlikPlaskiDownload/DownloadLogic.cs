@@ -50,7 +50,6 @@ namespace PlikPlaskiDownload
                 Console.WriteLine("Deserialized json is null.");
                 Console.WriteLine("Failed to load json.");
                 Environment.Exit(1);
-                //throw new NoNullAllowedException("Deserialized json is null.");
             }
             else
             {
