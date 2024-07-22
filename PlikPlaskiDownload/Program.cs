@@ -10,11 +10,14 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Security.Cryptography;
 using System.Security.Principal;
+using DatabaseConnection;
 
 namespace PlikPlaskiDownload
 {
     internal static partial class Pobieranie
     {
+        
+
         private static string format = ".7z";
         
         static void Main(string[] args)

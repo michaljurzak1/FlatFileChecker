@@ -8,10 +8,11 @@ using Microsoft.Data.Sqlite;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Transactions;
+using DatabaseConnection;
 
-namespace PlikPlaskiDownload
+namespace DatabaseConnection
 {
-    internal sealed class SqliteDB : IConnection
+    public sealed class SqliteDB : IConnection
     {
         private SqliteConnection connection;
 
@@ -107,15 +108,8 @@ namespace PlikPlaskiDownload
             return new SqliteParameter(name, value);
         }
 
-        public void BulkInsert(Pobieranie.FlatFile flatfile)
+        public void BulkInsert(Dictionary<string, string[]> tableDataPairs) // zmienic na dictionary<strubg, string[]>
         {
-            var tableDataPairs = new Dictionary<string, string[]>
-            {
-                { "SkrotyPodatnikowCzynnych", flatfile.skrotyPodatnikowCzynnych },
-                { "SkrotyPodatnikowZwolnionych", flatfile.skrotyPodatnikowZwolnionych },
-                { "Maski", flatfile.maski }
-            };
-
             foreach (var pair in tableDataPairs)
             {
                 using (SqliteTransaction transaction = connection.BeginTransaction())

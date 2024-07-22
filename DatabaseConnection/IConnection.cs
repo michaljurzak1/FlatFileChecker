@@ -1,15 +1,13 @@
-﻿using Microsoft.Data.Sqlite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlikPlaskiDownload
+namespace DatabaseConnection
 {
-    /*
-    internal interface IConnection
+    public interface IConnection
     {
         bool Connect();
         bool Close();
@@ -19,7 +17,7 @@ namespace PlikPlaskiDownload
 
         IDbDataParameter CreateParameter(string name, object value);
 
-        void BulkInsert(Pobieranie.FlatFile flatfile); 
+        void BulkInsert(Dictionary<string, string[]> dictTableConnection); 
 
-    }*/
+    }
 }
