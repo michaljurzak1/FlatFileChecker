@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -183,6 +184,32 @@ namespace PlikPlaskiDownload
                 Console.WriteLine("Error while extracting file.");
                 Console.WriteLine(e.Message);
                 Environment.Exit(1);
+            }
+        }
+
+        public void DeleteUsedFiles()
+        {
+            var directory = Path.GetDirectoryName(save_path);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(save_path);
+
+            if (string.IsNullOrEmpty(directory))
+            {
+                directory = ".";
+            }
+
+            string searchPattern = fileNameWithoutExtension + ".*";
+            var filesToDelete = Directory.GetFiles(directory, searchPattern);
+            foreach (var file in filesToDelete)
+            {
+                try
+                {
+                    File.Delete(file);
+                    Console.WriteLine("{0} deleted.", file);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error deleting file {0}: {1}", file, e.Message);
+                }
             }
         }
     }

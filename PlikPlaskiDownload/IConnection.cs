@@ -18,5 +18,7 @@ namespace PlikPlaskiDownload
 
         IDbDataParameter CreateParameter(string name, object value);
 
+        void BulkInsert(Pobieranie.FlatFile flatfile); 
+
     }
 }

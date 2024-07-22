@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Transactions;
 
 namespace PlikPlaskiDownload
 {
@@ -104,6 +105,36 @@ namespace PlikPlaskiDownload
         public IDbDataParameter CreateParameter(string name, object value)
         {
             return new SqliteParameter(name, value);
+        }
+
+        public void BulkInsert(Pobieranie.FlatFile flatfile)
+        {
+            var tableDataPairs = new Dictionary<string, string[]>
+            {
+                { "SkrotyPodatnikowCzynnych", flatfile.skrotyPodatnikowCzynnych },
+                { "SkrotyPodatnikowZwolnionych", flatfile.skrotyPodatnikowZwolnionych },
+                { "Maski", flatfile.maski }
+            };
+
+            foreach (var pair in tableDataPairs)
+            {
+                using (SqliteTransaction transaction = connection.BeginTransaction())
+                {
+                    var command = connection.CreateCommand();
+                    command.CommandText = $"INSERT INTO {pair.Key} (value) VALUES ($value)";
+
+                    var parameter = command.CreateParameter();
+                    parameter.ParameterName = "$value";
+                    command.Parameters.Add(parameter);
+
+                    foreach (var value in pair.Value)
+                    {
+                        parameter.Value = value;
+                        command.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }
+            }
         }
     }
 }
