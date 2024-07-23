@@ -6,33 +6,46 @@ namespace PlikPlaskiCheck
 {
     internal static partial class Checking
     {
-        private static string format = ".7z";
-
         static void Main(string[] args)
         {
-            // program for searching DB
-            CheckDataSourceFactory factory = new CheckDataSourceFactory(new SqliteDB(true));
-
-            //check database if there is data
-            #region Check Sha512 Date Nip Nrb
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Usage: PlikPlaskiCheck.exe <nip (10 characters)> <nrb (26 characters)>");
+                Environment.Exit(1);
+            }
 
             string date = DateTime.Now.ToString("yyyyMMdd");
+            string nip = args[0];
+            string nrb = args[1];
+
+            /*
+             Some cases:
+            1:
             string nip = "6750001923";
-            string nrb = "77124022941111001073675085";
-            
+            string nrb = "23124069608070101200041035";
+             */
+
+            CheckDataSourceFactory factory = new CheckDataSourceFactory(new SqliteDB(true));
+
+            #region Check Sha512
+            /*
+            if (CheckDataSourceFactory.GetSha512("20191018", "1134679109", "XX72123370XXXXXXX022XXXXXX")
+                == "d3dfed802034d198b484c9f19e43c1b7540c3a7808503d01a5ccedbb169012bee6a77979ed46b27f5de2bee0d22eb7c7ca9522dfa92e465999e68e9906e01425")
+                Console.WriteLine("Sha512 is correct");
+            */
+            #endregion Check Sha512
+
             Console.WriteLine("Checking for date:{0}, nip:{1}, nrb:{2}", date, nip, nrb);
 
+            #region Check Date Nip Nrb
+                        
             try
             {
-                string? sha512 = factory.CheckDateNipNrb(date, nip, nrb);
-                if (sha512 != null)
-                {
-                    Console.WriteLine(sha512);
-                }
-                else
-                {
-                    Console.WriteLine("No record found");
-                }
+                // Check for size of the database
+                Console.WriteLine($"Database size: {factory.CountData()}");
+                
+                // Final check for data
+                Console.WriteLine(factory.CheckAccount(date, nip, nrb));
             }
             catch (System.Exception e)
             {
@@ -41,13 +54,7 @@ namespace PlikPlaskiCheck
                 Environment.Exit(1);
             }
             
-            
-
-            //Console.WriteLine(flatfile.naglowek.schemat); // testowe, sprawdzenie czy parsuje json
-            #endregion Check Sha512 Date Nip Nrb
-
-
+            #endregion Check Date Nip Nrb
         }
-
     }
 }
