@@ -16,6 +16,7 @@ namespace DatabaseConnection
             this.connection = connection;
         }
 
+        #region helper methods
         public bool CheckFlatFileAvailable(DateTime now)
         {
             // Ensure one minute delay after 00:00
@@ -49,5 +50,7 @@ namespace DatabaseConnection
             //DateTime date = new DateTime(2024, 7, 18); // 19
             //return date;
         }
+
+        #endregion helper methods
     }
 }

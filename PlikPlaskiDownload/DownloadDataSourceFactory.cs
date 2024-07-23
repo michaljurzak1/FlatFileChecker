@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace PlikPlaskiDownload
 {
-    internal class DataSourceFactory : DataSourceFactoryAbstract
+    internal class DownloadDataSourceFactory : DataSourceFactoryAbstract
     {
         IConnection connection;
 
-        public DataSourceFactory(IConnection connection) : base(connection)
+        public DownloadDataSourceFactory(IConnection connection) : base(connection)
         {
             this.connection = connection;
             Initiate_DB(); //initiates all tables or truncates SPCzynnych, SPZwolnionych, Maski tables
@@ -41,6 +41,8 @@ namespace PlikPlaskiDownload
 
             Console.WriteLine("Saved");
         }
+
+        #region database insertion handling methods
 
         private void DaneInsert(string generatingDate, string nTransformations)
         {
@@ -76,7 +78,7 @@ namespace PlikPlaskiDownload
             connection.ExecuteNonQuery("DELETE FROM sqlite_sequence WHERE name = 'Maski';");
         }
 
-        private bool Initiate_DB()
+        protected bool Initiate_DB()
         {
             // create tables if not exist
             connection.ExecuteNonQuery(
@@ -107,5 +109,6 @@ namespace PlikPlaskiDownload
 
             return true;
         }
+        #endregion database insertion handling methods
     }
 }

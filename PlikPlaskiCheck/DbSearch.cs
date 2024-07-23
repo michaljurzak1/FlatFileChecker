@@ -8,6 +8,6 @@ namespace PlikPlaskiCheck
 {
     internal class DbSearch
     {
-
+        // Database search logic
     }
 }

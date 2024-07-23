@@ -8,7 +8,6 @@ using Microsoft.Data.Sqlite;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Transactions;
-using DatabaseConnection;
 
 namespace DatabaseConnection
 {
@@ -16,9 +15,9 @@ namespace DatabaseConnection
     {
         private SqliteConnection connection;
 
-        public SqliteDB()
+        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite")
         {
-            Connect();
+            Connect(onlyRead, dbPath);
         }
 
         ~SqliteDB()
@@ -26,20 +25,25 @@ namespace DatabaseConnection
             Close();
         }
 
-        public bool Connect()
+        public bool Connect(bool onlyRead, string dbPath)
         {
             try
             {
+                dbPath = Path.Combine(new string[] { dbPath, "plikplaski.db" });
                 // ?
-                if (File.Exists("plikplaski.db"))
+                if (File.Exists(dbPath))
                 {
-                    connection = new SqliteConnection("Data Source=plikplaski.db");
+                    connection = new SqliteConnection($"Data Source={dbPath}");
                     connection.Open();
                     Console.WriteLine("Connected to database");
                 }
+                else if (onlyRead)
+                {
+                    throw new DataException("Database not found");
+                }
                 else
                 {
-                    connection = new SqliteConnection("Data Source=plikplaski.db");
+                    connection = new SqliteConnection($"Data Source={dbPath}");
                     connection.Open();
                     Console.WriteLine("Created and connected database");
 
@@ -108,7 +112,7 @@ namespace DatabaseConnection
             return new SqliteParameter(name, value);
         }
 
-        public void BulkInsert(Dictionary<string, string[]> tableDataPairs) // zmienic na dictionary<strubg, string[]>
+        public void BulkInsert(Dictionary<string, string[]> tableDataPairs)
         {
             foreach (var pair in tableDataPairs)
             {

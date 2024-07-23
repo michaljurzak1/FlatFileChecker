@@ -9,7 +9,7 @@ namespace DatabaseConnection
 {
     public interface IConnection
     {
-        bool Connect();
+        bool Connect(bool onlyRead, string dbPath);
         bool Close();
         DataTable ExecuteQuery(string query);
 
