@@ -19,6 +19,18 @@ namespace PlikPlaskiCheck
             this.connection = connection;
         }
 
+        #region data validation
+
+        public bool IsDataValid()
+        {
+            DataTable dt = connection.ExecuteQuery("SELECT COUNT(deleted) FROM Dane WHERE deleted = 0");
+
+            if (dt.Rows.Count == 0 || int.Parse(dt.Rows[0][0].ToString()) == 0)
+                return false;
+
+            return true;
+        }        
+
         public int CountData()
         {
             DataTable dt = this.connection.ExecuteQuery(
@@ -38,6 +50,8 @@ namespace PlikPlaskiCheck
 
             return nRows;
         }
+
+        #endregion data validation
 
         #region database check for date, nip, nrb
 

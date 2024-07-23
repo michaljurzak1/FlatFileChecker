@@ -22,7 +22,7 @@ namespace DatabaseConnection
             // Ensure one minute delay after 00:00
             try
             {
-                var last_date = now > Get_Last_date().AddMinutes(1);
+                var last_date = now.Date > Get_Last_date().AddMinutes(1);
                 return last_date;
             }
             catch (DataException e)

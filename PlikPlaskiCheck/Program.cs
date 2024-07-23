@@ -8,32 +8,20 @@ namespace PlikPlaskiCheck
     {
         static void Main(string[] args)
         {
+            /*
             if (args.Length != 2)
             {
                 Console.WriteLine("Usage: PlikPlaskiCheck.exe <nip (10 characters)> <nrb (26 characters)>");
                 Environment.Exit(1);
             }
+            */
+            ArgsChecking(args);
 
             string date = DateTime.Now.ToString("yyyyMMdd");
             string nip = args[0];
             string nrb = args[1];
 
-            /*
-             Some cases:
-            1:
-            string nip = "6750001923";
-            string nrb = "23124069608070101200041035";
-             */
-
             CheckDataSourceFactory factory = new CheckDataSourceFactory(new SqliteDB(true));
-
-            #region Check Sha512
-            /*
-            if (CheckDataSourceFactory.GetSha512("20191018", "1134679109", "XX72123370XXXXXXX022XXXXXX")
-                == "d3dfed802034d198b484c9f19e43c1b7540c3a7808503d01a5ccedbb169012bee6a77979ed46b27f5de2bee0d22eb7c7ca9522dfa92e465999e68e9906e01425")
-                Console.WriteLine("Sha512 is correct");
-            */
-            #endregion Check Sha512
 
             Console.WriteLine("Checking for date:{0}, nip:{1}, nrb:{2}", date, nip, nrb);
 
@@ -41,6 +29,12 @@ namespace PlikPlaskiCheck
                         
             try
             {
+                if (!factory.IsDataValid())
+                {
+                    Console.WriteLine("Latest Data is set to deleted.");
+                    Environment.Exit(1);
+                }
+
                 // Check for size of the database
                 Console.WriteLine($"Database size: {factory.CountData()}");
                 
@@ -55,6 +49,21 @@ namespace PlikPlaskiCheck
             }
             
             #endregion Check Date Nip Nrb
+        }
+
+        private static void ArgsChecking(string[] args)
+        {
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Usage: PlikPlaskiCheck.exe <nip (10 characters)> <nrb (26 characters)>");
+                Environment.Exit(1);
+            }
+            // need another statement if args length is shorter than 2
+            if (args[0].Length != 10 || args[1].Length != 26)
+            {
+                Console.WriteLine("Usage: PlikPlaskiCheck.exe <nip (10 characters)> <nrb (26 characters)>");
+                Environment.Exit(1);
+            }
         }
     }
 }
