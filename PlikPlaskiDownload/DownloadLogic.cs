@@ -30,6 +30,7 @@ namespace PlikPlaskiDownload
             save_path = Get_Save_Path();
         }
 
+        #region logic invoke
         public FlatFile Invoke_Logic()
         {
             // check for 7z presence
@@ -59,7 +60,10 @@ namespace PlikPlaskiDownload
 
             return flatfile;
         }
+        #endregion logic invoke
 
+        #region helper methods
+        #region name modifications
         public string Get_Save_Path()
         {
             return string.Format("./{0}{1}", this.polish_local_time.ToString("yyyyMMdd"), this.format);
@@ -74,6 +78,7 @@ namespace PlikPlaskiDownload
         {
             return prefix_url + this.polish_local_time.ToString("yyyyMMdd") + this.format;
         }
+        #endregion name modifications
 
         public bool Check_If_File_Present(string file_path)
         {
@@ -85,7 +90,9 @@ namespace PlikPlaskiDownload
                return false;
             }
         }
+        #endregion helper methods
 
+        #region flatfile download and json loading
         public string Download_Flat_File(string url)
         {
             var uri = new Uri(url);
@@ -158,10 +165,12 @@ namespace PlikPlaskiDownload
             }
 
         }
+        #endregion flatfile download and json loading
 
+        #region file handling
         public static void ExtractFile(string sourceArchive, string destination = ".")
         {
-            string zPath = "7za.exe"; //add to proj and set CopyToOuputDir
+            string zPath = "7za.exe"; //add to download solution and set CopyToOuputDir
             try
             {
                 ProcessStartInfo pro = new ProcessStartInfo();
@@ -211,6 +220,7 @@ namespace PlikPlaskiDownload
                 }
             }
         }
+        #endregion file handling
     }
 }
 

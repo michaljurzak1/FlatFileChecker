@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using DatabaseConnection;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,27 +11,14 @@ using System.Threading.Tasks;
 
 namespace PlikPlaskiDownload
 {
-    internal class DataSourceFactory
+    internal class DownloadDataSourceFactory : DataSourceFactoryAbstract
     {
         IConnection connection;
 
-        public DataSourceFactory(IConnection connection)
+        public DownloadDataSourceFactory(IConnection connection) : base(connection)
         {
             this.connection = connection;
             Initiate_DB(); //initiates all tables or truncates SPCzynnych, SPZwolnionych, Maski tables
-        }
-
-        public bool CheckFlatFileAvailable(DateTime now)
-        {
-            // Ensure one minute delay after 00:00
-            try
-            {
-                var last_date = now > Get_Last_date().AddMinutes(1);
-                return last_date;
-            } catch (DataException e)
-            {
-                return true;
-            }
         }
 
         public void SaveFlatFile(Pobieranie.FlatFile flatfile)
@@ -41,11 +29,20 @@ namespace PlikPlaskiDownload
 
             Console.WriteLine("Saving new data");
 
-            connection.BulkInsert(flatfile);
+            var tableDataPairs = new Dictionary<string, string[]>
+            {
+                { "SkrotyPodatnikowCzynnych", flatfile.skrotyPodatnikowCzynnych },
+                { "SkrotyPodatnikowZwolnionych", flatfile.skrotyPodatnikowZwolnionych },
+                { "Maski", flatfile.maski }
+            };
+
+            connection.BulkInsert(tableDataPairs);
             DaneInsert(flatfile.naglowek.dataGenerowaniaDanych, flatfile.naglowek.liczbaTransformacji);
 
             Console.WriteLine("Saved");
         }
+
+        #region database insertion handling methods
 
         private void DaneInsert(string generatingDate, string nTransformations)
         {
@@ -81,7 +78,7 @@ namespace PlikPlaskiDownload
             connection.ExecuteNonQuery("DELETE FROM sqlite_sequence WHERE name = 'Maski';");
         }
 
-        private bool Initiate_DB()
+        protected bool Initiate_DB()
         {
             // create tables if not exist
             connection.ExecuteNonQuery(
@@ -112,37 +109,6 @@ namespace PlikPlaskiDownload
 
             return true;
         }
-
-        private DateTime Get_Last_date()
-        {
-            // check last date from column: dataGenerowaniaDanych (20240719)
-            DataTable dt = connection.ExecuteQuery("SELECT generatingDate FROM Dane WHERE deleted = 0 ORDER BY id DESC LIMIT 1");
-            if (dt.Rows.Count == 0)
-            {
-                throw new DataException("No data in DB");
-            }
-            string? date = dt.Rows[0]["generatingDate"].ToString();
-            if (date == null)
-            {
-                throw new DataException("No data in DB");
-            }
-            return DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture);
-            
-            // for testing:
-            //DateTime date = new DateTime(2024, 7, 18); // 19
-            //return date;
-        }
-
-        public bool Is_Record_In_Table(string tableName, string value, string columnName = "value")
-        {
-            DataTable dt = connection.ExecuteQuery($"SELECT * FROM {tableName} WHERE {columnName} = '{value}'");
-
-            if (dt.Rows.Count == 1)
-                return true;
-            else if (dt.Rows.Count == 0)
-                return false;
-            else
-                throw new DataException("More than one record in table");
-        }
+        #endregion database insertion handling methods
     }
 }

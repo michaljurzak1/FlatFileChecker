@@ -9,15 +9,15 @@ using System.Data.SqlClient;
 using System.Data.Common;
 using System.Transactions;
 
-namespace PlikPlaskiDownload
+namespace DatabaseConnection
 {
-    internal sealed class SqliteDB : IConnection
+    public sealed class SqliteDB : IConnection
     {
         private SqliteConnection connection;
 
-        public SqliteDB()
+        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite")
         {
-            Connect();
+            Connect(onlyRead, dbPath);
         }
 
         ~SqliteDB()
@@ -25,20 +25,25 @@ namespace PlikPlaskiDownload
             Close();
         }
 
-        public bool Connect()
+        public bool Connect(bool onlyRead, string dbPath)
         {
             try
             {
+                dbPath = Path.Combine(new string[] { dbPath, "plikplaski.db" });
                 // ?
-                if (File.Exists("plikplaski.db"))
+                if (File.Exists(dbPath))
                 {
-                    connection = new SqliteConnection("Data Source=plikplaski.db");
+                    connection = new SqliteConnection($"Data Source={dbPath}");
                     connection.Open();
                     Console.WriteLine("Connected to database");
                 }
+                else if (onlyRead)
+                {
+                    throw new DataException("Database not found");
+                }
                 else
                 {
-                    connection = new SqliteConnection("Data Source=plikplaski.db");
+                    connection = new SqliteConnection($"Data Source={dbPath}");
                     connection.Open();
                     Console.WriteLine("Created and connected database");
 
@@ -107,15 +112,8 @@ namespace PlikPlaskiDownload
             return new SqliteParameter(name, value);
         }
 
-        public void BulkInsert(Pobieranie.FlatFile flatfile)
+        public void BulkInsert(Dictionary<string, string[]> tableDataPairs)
         {
-            var tableDataPairs = new Dictionary<string, string[]>
-            {
-                { "SkrotyPodatnikowCzynnych", flatfile.skrotyPodatnikowCzynnych },
-                { "SkrotyPodatnikowZwolnionych", flatfile.skrotyPodatnikowZwolnionych },
-                { "Maski", flatfile.maski }
-            };
-
             foreach (var pair in tableDataPairs)
             {
                 using (SqliteTransaction transaction = connection.BeginTransaction())
