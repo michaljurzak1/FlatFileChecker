@@ -23,7 +23,7 @@ namespace PlikPlaskiCheck
 
         public bool IsDataValid()
         {
-            DataTable dt = connection.ExecuteQuery("SELECT COUNT(deleted) FROM Dane WHERE deleted = 0");
+            DataTable dt = connection.ExecuteQuery($"SELECT COUNT(deleted) FROM Dane WHERE deleted = 0 AND generatingDate = {DateTime.Now.ToString("yyyyMMdd")}");
 
             if (dt.Rows.Count == 0 || int.Parse(dt.Rows[0][0].ToString()) == 0)
                 return false;

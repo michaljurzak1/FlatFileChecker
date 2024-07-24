@@ -31,7 +31,7 @@ namespace PlikPlaskiCheck
             {
                 if (!factory.IsDataValid())
                 {
-                    Console.WriteLine("Latest Data is set to deleted.");
+                    Console.WriteLine("Latest Data in Database is not valid.");
                     Environment.Exit(1);
                 }
 

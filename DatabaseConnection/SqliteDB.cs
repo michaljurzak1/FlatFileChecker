@@ -43,6 +43,8 @@ namespace DatabaseConnection
                 }
                 else
                 {
+                    Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
+                    File.Create(dbPath).Close();
                     connection = new SqliteConnection($"Data Source={dbPath}");
                     connection.Open();
                     Console.WriteLine("Created and connected database");
