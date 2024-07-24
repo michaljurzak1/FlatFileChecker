@@ -85,6 +85,16 @@ namespace PlikPlaskiCheck
             nip = nip.Replace(" ", "");
             nrb = nrb.Replace(" ", "");
 
+            try
+            {
+                int iterations = int.Parse(GetNTransformations(date));
+                Console.WriteLine("Iterations: " + iterations);
+            }
+            catch (Exception e)
+            {
+                throw new DataException("Could not get number of transformations");
+            }
+
             if (date.Length != 8 || nip.Length != 10 || nrb.Length != 26)
                 throw new ArgumentException("Invalid date, nip or nrb");
 
@@ -189,6 +199,27 @@ namespace PlikPlaskiCheck
             string[] columnValues = dt.AsEnumerable().Select(x => x[columnName].ToString()).ToArray<string>();
 
             return columnValues;
+        }
+
+        private string[] SelectFromTableWhere(string tableName, string columnName, string where)
+        {
+            DataTable dt = connection.ExecuteQuery($"SELECT {columnName} FROM {tableName} WHERE {where}");
+            if (dt.Rows.Count == 0)
+                throw new DataException($"No data in DB: {tableName}");
+            string[] columnValues = dt.AsEnumerable().Select(x => x[columnName].ToString()).ToArray<string>();
+
+            return columnValues;
+        }
+
+        private string? GetNTransformations(string date)
+        {
+            string where = "generatingDate = " + date;
+            string[]? values = SelectFromTableWhere("Dane", "nTransformations", where);
+
+            if (values.Length == 0)
+                return null;
+
+            return values[0];
         }
 
         #endregion helper methods
