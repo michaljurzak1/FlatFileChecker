@@ -35,13 +35,9 @@ namespace PlikPlaskiCheck
         public int CountData()
         {
             DataTable dt = this.connection.ExecuteQuery(
-                @"select sum(union_tables.c)
-                  from
-                      (select count() as c
-                       from SkrotyPodatnikowCzynnych
-                       union
-                       select count() as c
-                       from SkrotyPodatnikowZwolnionych) as union_tables"
+                @"select
+                    (select count() from SkrotyPodatnikowZwolnionych) +
+                    (select count() from SkrotyPodatnikowCzynnych)"
                 );
 
             int nRows = int.Parse(dt.Rows[0][0].ToString());
