@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PlikPlaskiDownload
 {
-    internal class DownloadDataSourceFactory : DataSourceFactoryAbstract
+    public class DownloadDataSourceFactory : DataSourceFactoryAbstract
     {
         IConnection connection;
 

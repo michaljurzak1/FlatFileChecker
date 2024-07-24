@@ -14,7 +14,7 @@ using DatabaseConnection;
 
 namespace PlikPlaskiDownload
 {
-    internal static partial class Pobieranie
+    public static partial class Pobieranie
     {
         private static string format = ".7z";
 

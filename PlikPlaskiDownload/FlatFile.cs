@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 namespace PlikPlaskiDownload
 {
-    internal static partial class Pobieranie
+    public static partial class Pobieranie
     {
-        internal class FlatFile
+        public class FlatFile
         {
             [JsonProperty("naglowek")]
             public Naglowek naglowek;
