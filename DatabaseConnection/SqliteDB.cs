@@ -15,27 +15,34 @@ namespace DatabaseConnection
     {
         private SqliteConnection connection;
         private string DbName;
+        private string DbPath;
+        private bool isMock;
 
-        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite", string dbName="plikplaski.db")
+        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite", string dbName="plikplaski.db", bool mock=false)
         {
+            isMock = mock;
+            DbPath = dbPath;
             DbName = dbName;
-            Connect(onlyRead, dbPath);
+            Connect(onlyRead, dbPath, mock);
         }
 
         ~SqliteDB()
         {
-            Close();
+            if(!Close())
+            {
+                throw new DataException("Error closing database connection.");
+            }
         }
 
-        public bool Connect(bool onlyRead, string dbPath)
+        public bool Connect(bool onlyRead, string dbPath, bool mock)
         {
             try
             {
                 dbPath = Path.Combine(new string[] { dbPath, DbName });
 
-                if (File.Exists(dbPath))
+                if (File.Exists(dbPath) && !mock)
                 {
-                    connection = new SqliteConnection($"Data Source={dbPath}");
+                    connection = new SqliteConnection($"Data Source={dbPath};Pooling=False");
                     connection.Open();
                     Console.WriteLine("Connected to database");
                 }
@@ -47,7 +54,7 @@ namespace DatabaseConnection
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
                     File.Create(dbPath).Close();
-                    connection = new SqliteConnection($"Data Source={dbPath}");
+                    connection = new SqliteConnection($"Data Source={dbPath};Pooling=False");
                     connection.Open();
                     Console.WriteLine("Created and connected database");
                 }
@@ -64,8 +71,26 @@ namespace DatabaseConnection
 
         public bool Close()
         {
-            if(this.connection != null)
+            if (this.connection != null)
+            {
                 this.connection.Close();
+                this.connection.Dispose();
+            }
+            if (isMock)
+            {
+                try
+                {
+                    string dbPath = Path.Combine(new string[] { DbPath, DbName });
+                    File.Delete(dbPath);
+                    Console.WriteLine("Mock database file deleted");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Mock database file could not be deleted. Close all programs that use this file.");
+                    throw e;
+                }
+            }
+
             return true;
         }
 

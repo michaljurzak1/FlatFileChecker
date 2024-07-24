@@ -17,6 +17,18 @@ namespace DatabaseConnection
             this.connection = connection;
         }
 
+        ~DataSourceFactoryAbstract()
+        {
+            try
+            {
+                this.connection.Close();
+            }
+            catch
+            {
+                throw new DataException("Error closing database abstract connection.");
+            }
+        }
+
         #region helper methods
 
         public bool CheckFlatFileAvailable(DateTime now)
