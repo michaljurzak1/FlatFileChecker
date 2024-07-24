@@ -22,6 +22,14 @@ namespace DatabaseConnection
             Connect(onlyRead, dbPath);
         }
 
+        public SqliteDB(Dictionary<string, string[]> dataToTable, string generatingDate, string nTransformations, bool onlyRead = true, string dbPath = "C:/DatabaseSqlite", string dbName = "plikplaski.db")
+        {
+            DbName = dbName;
+            Connect(onlyRead, dbPath);
+            BulkInsert(dataToTable);
+            InsertIntoDaneTable(generatingDate, nTransformations);
+        }
+
         ~SqliteDB()
         {
             Close();
@@ -133,6 +141,21 @@ namespace DatabaseConnection
                     transaction.Commit();
                 }
             }
+        }
+
+        private void InsertIntoDaneTable(string generatingDate, string nTransformations)
+        {
+            IDbDataParameter[] parameters = new IDbDataParameter[4];
+            parameters[0] = CreateParameter("$insertingDate", DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss")); // 2024.07.19 19:00:00
+            parameters[1] = CreateParameter("$generatingDate", generatingDate);
+            parameters[2] = CreateParameter("$deleted", 0);
+            parameters[3] = CreateParameter("$nTransformations", int.Parse(nTransformations));
+            ExecuteNonQuery(
+                @"INSERT INTO Dane 
+                (insertingDate, generatingDate, deleted, nTransformations) 
+                VALUES ($insertingDate,$generatingDate,$deleted,$nTransformations)",
+                parameters
+                );
         }
     }
 }

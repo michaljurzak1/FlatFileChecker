@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PlikPlaskiCheck
 {
-    internal class CheckDataSourceFactory : DataSourceFactoryAbstract
+    public class CheckDataSourceFactory : DataSourceFactoryAbstract
     {
         IConnection connection;
         int iterations;
