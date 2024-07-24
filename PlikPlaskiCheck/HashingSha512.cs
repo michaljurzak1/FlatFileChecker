@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PlikPlaskiCheck
 {
-    internal static class HashingSha512
+    public static class HashingSha512
     {
         #region sha512 logic
 
