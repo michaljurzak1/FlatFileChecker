@@ -14,9 +14,11 @@ namespace DatabaseConnection
     public sealed class SqliteDB : IConnection
     {
         private SqliteConnection connection;
+        private string DbName;
 
-        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite")
+        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite", string dbName="plikplaski.db")
         {
+            DbName = dbName;
             Connect(onlyRead, dbPath);
         }
 
@@ -29,7 +31,7 @@ namespace DatabaseConnection
         {
             try
             {
-                dbPath = Path.Combine(new string[] { dbPath, "plikplaski.db" });
+                dbPath = Path.Combine(new string[] { dbPath, DbName });
 
                 if (File.Exists(dbPath))
                 {
