@@ -49,6 +49,11 @@ namespace PlikPlaskiDownload
             connection.ExecuteNonQuery("UPDATE Dane SET deleted = 1");
         }
 
+        public void DaneInsertLoc(string generatingDate, string nTransformations)
+        {
+            base.DaneInsert(generatingDate, nTransformations);
+        }
+
         private void TruncateTables()
         {
             connection.ExecuteNonQuery("DELETE FROM SkrotyPodatnikowCzynnych");
