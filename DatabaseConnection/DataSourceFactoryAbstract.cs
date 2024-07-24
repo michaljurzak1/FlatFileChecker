@@ -45,10 +45,6 @@ namespace DatabaseConnection
                 throw new DataException("No data in DB");
             }
             return DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture);
-
-            // for testing:
-            //DateTime date = new DateTime(2024, 7, 18); // 19
-            //return date;
         }
 
         #endregion helper methods

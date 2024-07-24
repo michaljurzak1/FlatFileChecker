@@ -21,9 +21,9 @@ namespace PlikPlaskiCheck
 
         #region data validation
 
-        public bool IsDataValid()
+        public bool IsDataValid(string date)
         {
-            DataTable dt = connection.ExecuteQuery($"SELECT COUNT(deleted) FROM Dane WHERE deleted = 0 AND generatingDate = {DateTime.Now.ToString("yyyyMMdd")}");
+            DataTable dt = connection.ExecuteQuery($"SELECT COUNT(deleted) FROM Dane WHERE deleted = 0 AND generatingDate = {date}");
 
             if (dt.Rows.Count == 0 || int.Parse(dt.Rows[0][0].ToString()) == 0)
                 return false;

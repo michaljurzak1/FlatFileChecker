@@ -8,13 +8,6 @@ namespace PlikPlaskiCheck
     {
         static void Main(string[] args)
         {
-            /*
-            if (args.Length != 2)
-            {
-                Console.WriteLine("Usage: PlikPlaskiCheck.exe <nip (10 characters)> <nrb (26 characters)>");
-                Environment.Exit(1);
-            }
-            */
             ArgsChecking(args);
 
             string date = DateTime.Now.ToString("yyyyMMdd");
@@ -29,7 +22,7 @@ namespace PlikPlaskiCheck
                         
             try
             {
-                if (!factory.IsDataValid())
+                if (!factory.IsDataValid(date))
                 {
                     Console.WriteLine("Latest Data in Database is not valid.");
                     Environment.Exit(1);
