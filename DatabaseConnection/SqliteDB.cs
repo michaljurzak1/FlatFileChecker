@@ -30,7 +30,7 @@ namespace DatabaseConnection
             try
             {
                 dbPath = Path.Combine(new string[] { dbPath, "plikplaski.db" });
-                // ?
+
                 if (File.Exists(dbPath))
                 {
                     connection = new SqliteConnection($"Data Source={dbPath}");
@@ -48,7 +48,6 @@ namespace DatabaseConnection
                     connection = new SqliteConnection($"Data Source={dbPath}");
                     connection.Open();
                     Console.WriteLine("Created and connected database");
-
                 }
             }
             catch (SqliteException e)
@@ -104,9 +103,6 @@ namespace DatabaseConnection
                 }
                 return new SqliteCommand(query, this.connection).ExecuteNonQuery();
             }
-
-
-            //SqliteCommand newDatabase = new SqliteCommand(query, this.connection);
         }
 
         public IDbDataParameter CreateParameter(string name, object value)

@@ -25,7 +25,7 @@ namespace PlikPlaskiDownload
         {
             // before anything need to truncate and update
             TruncateTables();
-            UpdateDane();
+            UpdateDaneToDeleted();
 
             Console.WriteLine("Saving new data");
 
@@ -46,7 +46,7 @@ namespace PlikPlaskiDownload
 
         private void DaneInsert(string generatingDate, string nTransformations)
         {
-            // Insert into Dane table nessesary data
+            // Insert into table Dane necessary data
             IDbDataParameter[] parameters = new IDbDataParameter[4];
             parameters[0] = connection.CreateParameter("$insertingDate", DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss")); // 2024.07.19 19:00:00
             parameters[1] = connection.CreateParameter("$generatingDate", generatingDate);
@@ -55,14 +55,13 @@ namespace PlikPlaskiDownload
             connection.ExecuteNonQuery(
                 @"INSERT INTO Dane 
                 (insertingDate, generatingDate, deleted, nTransformations) 
-                VALUES ($insertingDate,$generatingDate,$deleted,$nTransformations)", 
+                VALUES ($insertingDate,$generatingDate,$deleted,$nTransformations)",
                 parameters
                 );
         }
 
-        private void UpdateDane()
+        private void UpdateDaneToDeleted()
         {
-            // Update all to deleted
             connection.ExecuteNonQuery("UPDATE Dane SET deleted = 1");
         }
 
@@ -89,7 +88,7 @@ namespace PlikPlaskiDownload
                 deleted INT(1) NOT NULL, 
                 nTransformations INT NOT NULL)"
             );
-            
+
             connection.ExecuteNonQuery(
                 @"CREATE TABLE IF NOT EXISTS SkrotyPodatnikowCzynnych 
                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 

@@ -14,6 +14,7 @@ namespace PlikPlaskiCheck
     {
         IConnection connection;
         int iterations;
+
         public CheckDataSourceFactory(IConnection connection) : base(connection)
         {
             this.connection = connection;
@@ -29,7 +30,7 @@ namespace PlikPlaskiCheck
                 return false;
 
             return true;
-        }        
+        }
 
         public int CountData()
         {
@@ -58,6 +59,7 @@ namespace PlikPlaskiCheck
         public string CheckAccount(string date, string nip, string nrb)
         {
             string? res = CheckDateNipNrb(date, nip, nrb);
+            
             if (res != null)
             {
                 return $"\nReal Account in {res}";
@@ -113,8 +115,8 @@ namespace PlikPlaskiCheck
             }
 
             Console.WriteLine("Checking if hash strings are in tables");
-            
-            foreach(string mask in masks)
+
+            foreach (string mask in masks)
             {
                 string? res = CheckDateNipNrb(date, nip, mask);
                 if (res != null)
@@ -126,13 +128,13 @@ namespace PlikPlaskiCheck
             return null;
         }
 
-
         #region masks logic
+
         private string[] NrbMasks(string nrb)
         {
             string like = nrb.Substring(2, 8);
             string[] masks = GetTableColumnLikeValues("Maski", like);
-            
+
             return ReplaceMasks(masks, nrb);
         }
 
@@ -157,10 +159,7 @@ namespace PlikPlaskiCheck
         }
 
         #endregion masks logic
-
         #endregion database check for date, nip, nrb
-
-        
 
         #region helper methods
 

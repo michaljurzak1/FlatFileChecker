@@ -19,7 +19,7 @@ namespace PlikPlaskiCheck
             Console.WriteLine("Checking for date:{0}, nip:{1}, nrb:{2}", date, nip, nrb);
 
             #region Check Date Nip Nrb
-                        
+
             try
             {
                 if (!factory.IsDataValid(date))
@@ -30,7 +30,7 @@ namespace PlikPlaskiCheck
 
                 // Check for size of the database
                 Console.WriteLine($"Database size: {factory.CountData()}");
-                
+
                 // Final check for data
                 Console.WriteLine(factory.CheckAccount(date, nip, nrb));
             }
@@ -40,7 +40,7 @@ namespace PlikPlaskiCheck
                 Console.WriteLine("Exiting.");
                 Environment.Exit(1);
             }
-            
+
             #endregion Check Date Nip Nrb
         }
 

@@ -11,12 +11,14 @@ namespace DatabaseConnection
     public abstract class DataSourceFactoryAbstract
     {
         IConnection connection;
+
         public DataSourceFactoryAbstract(IConnection connection)
         {
             this.connection = connection;
         }
 
         #region helper methods
+
         public bool CheckFlatFileAvailable(DateTime now)
         {
             // Ensure one minute delay after 00:00

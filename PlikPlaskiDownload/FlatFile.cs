@@ -31,7 +31,5 @@ namespace PlikPlaskiDownload
                 public string schemat;
             }
         }
-
-
     }
 }

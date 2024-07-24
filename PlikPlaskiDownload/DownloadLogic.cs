@@ -43,7 +43,7 @@ namespace PlikPlaskiDownload
             {
                 Console.WriteLine("Todays file {0} present, skipping download", save_path);
             }
-            
+
             FlatFile? flatfile = Load_json(save_path);
 
             if (flatfile == null)
@@ -57,12 +57,12 @@ namespace PlikPlaskiDownload
                 Console.WriteLine("Loaded json");
             }
 
-
             return flatfile;
         }
         #endregion logic invoke
 
         #region helper methods
+
         #region name modifications
         public string Get_Save_Path()
         {
@@ -82,17 +82,20 @@ namespace PlikPlaskiDownload
 
         public bool Check_If_File_Present(string file_path)
         {
-            if (File.Exists(file_path)){
+            if (File.Exists(file_path))
+            {
                 return true;
             }
             else
             {
-               return false;
+                return false;
             }
         }
+
         #endregion helper methods
 
         #region flatfile download and json loading
+
         public string Download_Flat_File(string url)
         {
             var uri = new Uri(url);
@@ -107,7 +110,7 @@ namespace PlikPlaskiDownload
                     {
                         using (var fs = new FileStream(save_path, FileMode.OpenOrCreate))
                         {
-                            
+
                             s.Result.CopyTo(fs);
                             Console.WriteLine("Saved result in " + Path.GetFullPath(save_path));
                             return save_path;
@@ -143,7 +146,8 @@ namespace PlikPlaskiDownload
             {
                 ExtractFile(save_path);
             }
-            else if(json_present){
+            else if (json_present)
+            {
                 Console.WriteLine("Json file already present, skipping 7z extraction");
             }
 
@@ -155,19 +159,20 @@ namespace PlikPlaskiDownload
                     FlatFile? flatfile = JsonConvert.DeserializeObject<FlatFile>(json);
                     return flatfile;
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     Console.WriteLine("Json deserialization not successful.");
                     Console.WriteLine(e.Message);
                     Environment.Exit(1);
                     return null;
                 }
-                
             }
-
         }
+
         #endregion flatfile download and json loading
 
         #region file handling
+
         public static void ExtractFile(string sourceArchive, string destination = ".")
         {
             string zPath = "7za.exe"; //add to download solution and set CopyToOuputDir
@@ -220,7 +225,9 @@ namespace PlikPlaskiDownload
                 }
             }
         }
+
         #endregion file handling
+
     }
 }
 

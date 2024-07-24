@@ -10,6 +10,7 @@ namespace PlikPlaskiCheck
     internal static class HashingSha512
     {
         #region sha512 logic
+
         public static string GetSha512(string date, string nip, string nrb, int iterations = 5000)
         {
             using (SHA512 sha512 = SHA512.Create())

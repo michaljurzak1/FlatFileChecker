@@ -16,10 +16,8 @@ namespace PlikPlaskiDownload
 {
     internal static partial class Pobieranie
     {
-        
-
         private static string format = ".7z";
-        
+
         static void Main(string[] args)
         {
             DownloadDataSourceFactory factory = new DownloadDataSourceFactory(new SqliteDB(false));
@@ -34,6 +32,7 @@ namespace PlikPlaskiDownload
             DownloadLogic logic = new DownloadLogic(format);
 
             FlatFile flatfile = logic.Invoke_Logic();
+
             #endregion Download
 
             factory.SaveFlatFile(flatfile);
