@@ -86,7 +86,7 @@ namespace PlikPlaskiCheck
             if (date.Length != 8 || nip.Length != 10 || nrb.Length != 26)
                 throw new ArgumentException("Invalid date, nip or nrb");
 
-            string hashString = GetSha512(date, nip, nrb);
+            string hashString = HashingSha512.GetSha512(date, nip, nrb);
             if (Is_Record_In_Table("SkrotyPodatnikowCzynnych", hashString))
                 return "SkrotyPodatnikowCzynnych";
 
@@ -109,7 +109,7 @@ namespace PlikPlaskiCheck
             Console.WriteLine("Creating hash strings");
             for (int i = 0; i < masks.Length; i++)
             {
-                hashStrings[i] = GetSha512(date, nip, masks[i]);
+                hashStrings[i] = HashingSha512.GetSha512(date, nip, masks[i]);
             }
 
             Console.WriteLine("Checking if hash strings are in tables");
@@ -160,36 +160,7 @@ namespace PlikPlaskiCheck
 
         #endregion database check for date, nip, nrb
 
-        #region sha512 logic
-        public static string GetSha512(string date, string nip, string nrb, int iterations=5000)
-        {
-            using (SHA512 sha512 = SHA512.Create())
-            {
-                byte[] hashBytes = Encoding.UTF8.GetBytes(date + nip + nrb);
-
-                string hashString = "";
-
-                for (int i = 0; i < iterations; i++)
-                {
-                    hashBytes = sha512.ComputeHash(hashBytes);
-                    hashString = FromHashByteToString(hashBytes);
-                    hashBytes = Encoding.UTF8.GetBytes(hashString);
-                }
-
-                return hashString;
-            }
-        }
-
-        private static string FromHashByteToString(byte[] hashBytes)
-        {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < hashBytes.Length; i++)
-            {
-                builder.Append(hashBytes[i].ToString("x2"));
-            }
-            return builder.ToString();
-        }
-        #endregion sha512 logic
+        
 
         #region helper methods
 
