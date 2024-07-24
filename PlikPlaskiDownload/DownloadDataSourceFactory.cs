@@ -44,22 +44,6 @@ namespace PlikPlaskiDownload
 
         #region database insertion handling methods
 
-        private void DaneInsert(string generatingDate, string nTransformations)
-        {
-            // Insert into table Dane necessary data
-            IDbDataParameter[] parameters = new IDbDataParameter[4];
-            parameters[0] = connection.CreateParameter("$insertingDate", DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss")); // 2024.07.19 19:00:00
-            parameters[1] = connection.CreateParameter("$generatingDate", generatingDate);
-            parameters[2] = connection.CreateParameter("$deleted", 0);
-            parameters[3] = connection.CreateParameter("$nTransformations", int.Parse(nTransformations));
-            connection.ExecuteNonQuery(
-                @"INSERT INTO Dane 
-                (insertingDate, generatingDate, deleted, nTransformations) 
-                VALUES ($insertingDate,$generatingDate,$deleted,$nTransformations)",
-                parameters
-                );
-        }
-
         private void UpdateDaneToDeleted()
         {
             connection.ExecuteNonQuery("UPDATE Dane SET deleted = 1");
