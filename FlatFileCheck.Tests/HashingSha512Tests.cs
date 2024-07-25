@@ -1,4 +1,4 @@
-namespace PlikPlaskiCheck.Tests
+namespace FlatFileCheck.Tests
 {
     [TestClass]
     public class HashingSha512Tests

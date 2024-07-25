@@ -7,9 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static PlikPlaskiDownload.Pobieranie;
+using static FlatFileDownload.Pobieranie;
 
-namespace PlikPlaskiDownload
+namespace FlatFileDownload
 {
     internal class DownloadLogic
     {
@@ -44,7 +44,19 @@ namespace PlikPlaskiDownload
                 Console.WriteLine("Todays file {0} present, skipping download", save_path);
             }
 
-            FlatFile? flatfile = Load_json(save_path);
+            FlatFile? flatfile;
+            try
+            {
+                flatfile = Load_json(save_path);
+            }
+            catch
+            {
+                Console.WriteLine("File corrupted, downloading");
+                save_path = Download_Flat_File(Get_Flat_File_Url());
+                Console.WriteLine("Finished downloading");
+                
+                flatfile = Load_json(save_path);
+            }
 
             if (flatfile == null)
             {
@@ -175,7 +187,7 @@ namespace PlikPlaskiDownload
 
         public static void ExtractFile(string sourceArchive, string destination = ".")
         {
-            string zPath = "7za.exe"; //add to download solution and set CopyToOuputDir
+            string zPath = "../../../../7zip/7za.exe"; //download and add to solution at 7zip dir
             try
             {
                 ProcessStartInfo pro = new ProcessStartInfo();

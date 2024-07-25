@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DatabaseConnection\DatabaseConnection.csproj" />
+    <ProjectReference Include="..\FlatFileDownload\FlatFileDownload.csproj" />
   </ItemGroup>
 	
 </Project>

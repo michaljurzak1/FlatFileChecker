@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Newtonsoft.Json;
 
-namespace PlikPlaskiDownload
+namespace FlatFileDownload
 {
     public static partial class Pobieranie
     {

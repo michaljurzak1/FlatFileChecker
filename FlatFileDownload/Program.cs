@@ -12,13 +12,13 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using DatabaseConnection;
 
-namespace PlikPlaskiDownload
+namespace FlatFileDownload
 {
     public static partial class Pobieranie
     {
         private static string format = ".7z";
 
-        static void Main(string[] args)
+        public static void Main(string[]? args)
         {
             DownloadDataSourceFactory factory = new DownloadDataSourceFactory(new SqliteDB(false));
 

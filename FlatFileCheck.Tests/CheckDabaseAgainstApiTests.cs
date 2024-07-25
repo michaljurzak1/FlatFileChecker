@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace PlikPlaskiCheck.Tests
+namespace FlatFileCheck.Tests
 {
     [TestClass]
     public class CheckDabaseAgainstApiTests
@@ -47,7 +47,7 @@ namespace PlikPlaskiCheck.Tests
         [DataRow("5260250274", "10101010100038252231000000")] // Ministerstwo Finansow
         public async Task CheckDbDefaultLocationAgainstApi(string nip, string nrb)
         {
-            if (File.Exists("/DatabaseSqlite/plikplaski.db"))
+            if (File.Exists("/DatabaseSqlite/flatfile.db"))
             {
                 try
                 {

@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlikPlaskiCheck
+namespace FlatFileCheck
 {
     public class CheckDataSourceFactory : DataSourceFactoryAbstract
     {

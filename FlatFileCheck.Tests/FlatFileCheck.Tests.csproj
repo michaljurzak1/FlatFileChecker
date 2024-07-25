@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DatabaseConnection\DatabaseConnection.csproj" />
-    <ProjectReference Include="..\PlikPlaskiCheck\PlikPlaskiCheck.csproj" />
-    <ProjectReference Include="..\PlikPlaskiDownload\PlikPlaskiDownload.csproj" />
+    <ProjectReference Include="..\FlatFileCheck\FlatFileCheck.csproj" />
+    <ProjectReference Include="..\FlatFileDownload\FlatFileDownload.csproj" />
   </ItemGroup>
 
   <ItemGroup>

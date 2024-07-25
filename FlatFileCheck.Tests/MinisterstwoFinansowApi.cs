@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PlikPlaskiCheck.Tests
+namespace FlatFileCheck.Tests
 {
     class MinisterstwoFinansowApi
     {

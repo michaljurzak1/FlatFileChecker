@@ -18,7 +18,7 @@ namespace DatabaseConnection
         private string DbPath;
         private bool isMock;
 
-        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite", string dbName="plikplaski.db", bool mock=false)
+        public SqliteDB(bool onlyRead=true, string dbPath="C:/DatabaseSqlite", string dbName="flatfile.db", bool mock=false)
         {
             isMock = mock;
             DbPath = dbPath;

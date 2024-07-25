@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FlatFileCheck": {
+      "commandName": "Project",
+      "commandLineArgs": "5260250274 10101010100038252231000000"
+    }
+  }
+}

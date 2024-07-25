@@ -1,8 +1,8 @@
 ﻿using DatabaseConnection;
 using Microsoft.Data.Sqlite;
-using PlikPlaskiDownload;
+using FlatFileDownload;
 
-namespace PlikPlaskiCheck.Tests
+namespace FlatFileCheck.Tests
 {
     [TestClass]
     public class CheckDataSourceFactoryTests
@@ -32,7 +32,7 @@ namespace PlikPlaskiCheck.Tests
         };
 
         private static string DbPath = ".";
-        private static string DbName = "plikplaskiMock.db";
+        private static string DbName = "flatfileMock.db";
         private static string MockDbName = Path.Combine(new string[] { DbPath, DbName });
         
         IConnection SQLiteconnection;
