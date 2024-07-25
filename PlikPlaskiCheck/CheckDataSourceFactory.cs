@@ -111,7 +111,9 @@ namespace PlikPlaskiCheck
 
             // get according masks
             Console.WriteLine("Extracting according masks");
-            string[] masks = NrbMasks(nrb);
+            string[]? masks = NrbMasks(nrb);
+            if (masks == null)
+                return null;
             string[] hashStrings = new string[masks.Length];
 
             Console.WriteLine("Creating hash strings");
@@ -136,12 +138,18 @@ namespace PlikPlaskiCheck
 
         #region masks logic
 
-        private string[] NrbMasks(string nrb)
+        private string[]? NrbMasks(string nrb)
         {
             string like = nrb.Substring(2, 8);
-            string[] masks = GetTableColumnLikeValues("Maski", like);
+            try
+            {
+                string[] masks = GetTableColumnLikeValues("Maski", like);
+                return ReplaceMasks(masks, nrb);
+            } catch (DataException e)
+            {
+                return null;
+            }
 
-            return ReplaceMasks(masks, nrb);
         }
 
         private static string[] ReplaceMasks(string[] masks, string template)

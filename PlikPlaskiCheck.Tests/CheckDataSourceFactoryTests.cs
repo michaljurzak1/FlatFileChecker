@@ -9,6 +9,7 @@ namespace PlikPlaskiCheck.Tests
     {
         string[] skrotyPodatnikowCzynnych = new string[]
             {
+                "f6ccff4f44adb6dc307951b99e53d54535fff8d5ff3bd132ddf46fa6ee86a6b252302f306adaa59963a5736851b383e1f913e5b719b4328a8a22ac1085d1c50f",
                 "0000037ffb0aac44690725f9968c1740c2d5c8780cfbd3ab85d60565fdf64e5da2066f18caf470463c66d18abd52b9c9c9b526501a0b9db319cd02d2b32c1151",
                 "0000123602993c214cf508b75276a5d8c18aa96d9e806fb35dce9084768c73aaf423eda9517854161514ee04918c8e8b5aba5b5ded408ec86089f93cf65daa8c",
                 "0000139041e8726290e517ea01a8b011c84ed19c89ab764258b4fc35cfc81dc50188f546aece9c00cff881c7ab23a6078aa2ce645fdb6255921d4cd64a6bcabd",
@@ -77,7 +78,20 @@ namespace PlikPlaskiCheck.Tests
 
             var result = factory.CountData();
 
-            Assert.AreEqual(6, result, "Data count is not correct.");
+            Assert.AreEqual(skrotyPodatnikowCzynnych.Length + skrotyPodatnikowZwolnionych.Length, 
+                result, "Data count is not correct.");
+        }
+
+        [TestMethod]
+        [DataRow("5512393471", "51 1950 0001 2006 0073 4183 0002", "\nReal Account in SkrotyPodatnikowCzynnych")]
+        public void CheckAccountTest(string nip, string nrb, string response)
+        {
+            var factory = new CheckDataSourceFactory(SQLiteconnection);
+
+            var result = factory.CheckAccount(generationDate, "5512393471", "51 1950 0001 2006 0073 4183 0002");
+            Console.WriteLine(result.Equals(response));
+
+            Assert.AreEqual(result, response, "Account check failed.");
         }
     }
 }
