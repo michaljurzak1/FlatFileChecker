@@ -12,9 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlikPlaskiCheck", "PlikPlas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseConnection", "DatabaseConnection\DatabaseConnection.csproj", "{A90367F8-3710-4644-B928-6009A50E21DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlikPlaskiDownload.Tests", "PlikPlaskiDownload.Tests\PlikPlaskiDownload.Tests.csproj", "{DAE24D11-129E-4F2D-B6CB-6EDE95D526D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlikPlaskiCheck.Tests", "PlikPlaskiCheck.Tests\PlikPlaskiCheck.Tests.csproj", "{ECB1B68F-7C91-4030-84C0-D3FEE4F0A8B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlikPlaskiCheck.Tests", "PlikPlaskiCheck.Tests\PlikPlaskiCheck.Tests.csproj", "{ECB1B68F-7C91-4030-84C0-D3FEE4F0A8B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +32,6 @@ Global
 		{A90367F8-3710-4644-B928-6009A50E21DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A90367F8-3710-4644-B928-6009A50E21DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A90367F8-3710-4644-B928-6009A50E21DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DAE24D11-129E-4F2D-B6CB-6EDE95D526D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAE24D11-129E-4F2D-B6CB-6EDE95D526D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DAE24D11-129E-4F2D-B6CB-6EDE95D526D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAE24D11-129E-4F2D-B6CB-6EDE95D526D3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ECB1B68F-7C91-4030-84C0-D3FEE4F0A8B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECB1B68F-7C91-4030-84C0-D3FEE4F0A8B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECB1B68F-7C91-4030-84C0-D3FEE4F0A8B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
