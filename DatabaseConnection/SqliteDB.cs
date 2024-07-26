@@ -23,6 +23,7 @@ namespace DatabaseConnection
             isMock = mock;
             DbPath = dbPath;
             DbName = dbName;
+            SqliteCacheMode cacheMode = SqliteCacheMode.Private;
             Connect(onlyRead, dbPath, mock);
         }
 

@@ -1,10 +1,12 @@
 ﻿using DatabaseConnection;
 using Microsoft.Data.Sqlite;
 using FlatFileDownload;
+using System.Data.Common;
 
 namespace FlatFileCheck.Tests
 {
     [TestClass]
+    [assembly: CollectionBehavior(DisableTestParallelization = true)]
     public class CheckDataSourceFactoryTests
     {
         string[] skrotyPodatnikowCzynnych = new string[]
@@ -35,7 +37,7 @@ namespace FlatFileCheck.Tests
         private static string DbName = "flatfileMock.db";
         private static string MockDbName = Path.Combine(new string[] { DbPath, DbName });
         
-        IConnection SQLiteconnection;
+        IConnection _connection;
         private const string generationDate = "20240725";
         private string nTransformations = "5000";
 
@@ -49,11 +51,11 @@ namespace FlatFileCheck.Tests
                     { "Maski", maski }
                 };
 
-            SQLiteconnection = new SqliteDB(false, DbPath, DbName, true);
+            _connection = new SqliteDB(false, DbPath, DbName, true);
 
-            DownloadDataSourceFactory downloadFactory = new DownloadDataSourceFactory(SQLiteconnection);
+            DownloadDataSourceFactory downloadFactory = new DownloadDataSourceFactory(_connection);
 
-            SQLiteconnection.BulkInsert(tableDataPairs);
+            _connection.BulkInsert(tableDataPairs);
             downloadFactory.DaneInsertLoc(generationDate, nTransformations);
         }
 
@@ -63,13 +65,17 @@ namespace FlatFileCheck.Tests
             // comment this line to keep the database after the test
             // however, it is not guaranteed that all test will have access
             // and will throw error
-            SQLiteconnection.Close();
+            _connection.Close();
+            _connection = null;
         }
 
         [TestMethod]
+        [assembly: DoNotParallelize]
         public void IsDataValidTest()
         {
-            var factory = new CheckDataSourceFactory(SQLiteconnection);
+
+
+            var factory = new CheckDataSourceFactory(_connection);
 
             var result = factory.IsDataValid(generationDate);
 
@@ -77,9 +83,10 @@ namespace FlatFileCheck.Tests
         }
 
         [TestMethod]
+        [assembly: DoNotParallelize]
         public void CountDataTest()
         {
-            var factory = new CheckDataSourceFactory(SQLiteconnection);
+            var factory = new CheckDataSourceFactory(_connection);
 
             var result = factory.CountData();
 
@@ -88,11 +95,12 @@ namespace FlatFileCheck.Tests
         }
 
         [TestMethod]
+        [assembly: DoNotParallelize]
         [DataRow("5512393471", "51 1950 0001 2006 0073 4183 0002", "\nReal Account in SkrotyPodatnikowCzynnych")]
         [DataRow("7740001454", "71124069606666000007118600", "\nVirtual Account in SkrotyPodatnikowZwolnionych")]
         public void CheckAccountTest(string nip, string nrb, string response)
         {
-            var factory = new CheckDataSourceFactory(SQLiteconnection);
+            var factory = new CheckDataSourceFactory(_connection);
 
             var result = factory.CheckAccount(generationDate, nip, nrb);
             Console.WriteLine(result.Equals(response));
@@ -101,13 +109,14 @@ namespace FlatFileCheck.Tests
         }
 
         [TestMethod]
+        [assembly: DoNotParallelize]
         [DataRow("SkrotyPodatnikowCzynnych", "0000123602993c214cf508b75276a5d8c18aa96d9e806fb35dce9084768c73aaf423eda9517854161514ee04918c8e8b5aba5b5ded408ec86089f93cf65daa8c", "value")]
         [DataRow("SkrotyPodatnikowZwolnionych", "000034b37dd7ff72a1509f7f3fe1df4ce20105e40ddd663b00249158d993b938a1cb721bf6d60f91f5c43d0c0c3708491878d0f4c2e0060bb09613fc0c5cf981", "value")]
         [DataRow("Maski", "XX12406960YYYXXXXXXXXXXXXX", "value")]
         [DataRow("Dane", generationDate, "generatingDate")]
         public void CheckRecordInTable(string tableName, string value, string columnName)
         {
-            var factory = new CheckDataSourceFactory(SQLiteconnection);
+            var factory = new CheckDataSourceFactory(_connection);
 
             var result = factory.Is_Record_In_Table(tableName, value, columnName);
 

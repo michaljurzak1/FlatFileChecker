@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace FlatFileCheck.Tests
 {
     [TestClass]
+    //[assembly: CollectionBehavior(DisableTestParallelization = true)]
     public class CheckDabaseAgainstApiTests
     {
         /*
@@ -28,7 +29,6 @@ namespace FlatFileCheck.Tests
                 HandleResponseException(e);
             }
         }*/
-
         private void HandleResponseException(Exception e)
         {
             var match = Regex.Match(e.Message, @"\b\d{3}\b");
@@ -44,6 +44,7 @@ namespace FlatFileCheck.Tests
         }
 
         [TestMethod]
+        [assembly: DoNotParallelize]
         [DataRow("5260250274", "10101010100038252231000000")] // Ministerstwo Finansow
         public async Task CheckDbDefaultLocationAgainstApi(string nip, string nrb)
         {
