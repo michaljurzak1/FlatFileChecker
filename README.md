@@ -16,7 +16,7 @@ Wykorzystywana jest lokalna baza danych SQLite, która jest tworzona w przypadku
 Jest to spowodowane codziennym generowaniem pliku, a także wsadem do funkcji skrótu Sha512 w danych, 
 który składa się z konkatenacji łańcuchów: `data + nip + nrb`, dlatego każdego dnia plik ma całkowicie inne dane.
 
-Cały program wypsuje informacje zwrotne.
+Cały program wypisuje informacje zwrotne.
 
 ## Pobieranie
 ```
@@ -47,3 +47,4 @@ Konto może być rzeczywiste, lub wirtualne:
 - rzeczywiste oznacza pojedyncze konto
 - konto wirtualne oznacza brak dosłownego istnienia go w bazie danych. **Może, lecz nie musi** istnieć, oznacza możliwe podkonto.
 
+*W przypadku braku istnienia pliku na serwerze, program pyta użytkownika o użycie istniejących danych z ostatnią datą.*
