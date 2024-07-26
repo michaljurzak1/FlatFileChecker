@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace DatabaseConnection
     public abstract class DataSourceFactoryAbstract
     {
         IConnection connection;
+        static string format = ".7z";
 
         public DataSourceFactoryAbstract(IConnection connection)
         {
@@ -24,12 +26,28 @@ namespace DatabaseConnection
             // Ensure one minute delay after 00:00
             try
             {
+                string url = "https://plikplaski.mf.gov.pl/pliki//" + now.ToString("yyyyMMdd") + format;
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                request.Method = "HEAD";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                HttpStatusCode status = response.StatusCode;
+
+                if (status != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException("Data is not available yet on the website.");
+                }
+
                 var last_date = now.Date > Get_Last_date().AddMinutes(1);
+
                 return last_date;
             }
             catch (DataException e)
             {
                 return true;
+            }
+            catch (WebException e)
+            {
+                throw new WebException("Data is not available yet on the website: " + e.Message);
             }
         }
 

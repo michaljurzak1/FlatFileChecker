@@ -14,30 +14,44 @@ using DatabaseConnection;
 
 namespace FlatFileDownload
 {
-    public static partial class Pobieranie
+    public static partial class Download
     {
         private static string format = ".7z";
 
         public static void Main(string[]? args)
         {
-            DownloadDataSourceFactory factory = new DownloadDataSourceFactory(new SqliteDB(false));
+            InvokeDownload();
+        }
 
-            #region Download
-
-            if (!factory.CheckFlatFileAvailable(DateTime.Now))
+        public static bool InvokeDownload()
+        {
+            try
             {
-                Console.WriteLine("No new data available, exiting.");
-                Environment.Exit(0);
+                DownloadDataSourceFactory factory = new DownloadDataSourceFactory(new SqliteDB(false));
+
+                #region Download
+
+                if (!factory.CheckFlatFileAvailable(DateTime.Now))
+                {
+                    Console.WriteLine("No new data available, exiting.");
+                    Environment.Exit(0);
+                }
+                DownloadLogic logic = new DownloadLogic(format);
+
+                FlatFile flatfile = logic.Invoke_Logic();
+
+                #endregion Download
+
+                factory.SaveFlatFile(flatfile);
+
+                logic.DeleteUsedFiles();
+                return true;
             }
-            DownloadLogic logic = new DownloadLogic(format);
-
-            FlatFile flatfile = logic.Invoke_Logic();
-
-            #endregion Download
-
-            factory.SaveFlatFile(flatfile);
-
-            logic.DeleteUsedFiles();
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
     }
 }

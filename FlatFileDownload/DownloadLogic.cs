@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static FlatFileDownload.Pobieranie;
+using static FlatFileDownload.Download;
 
 namespace FlatFileDownload
 {

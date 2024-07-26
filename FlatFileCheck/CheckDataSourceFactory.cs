@@ -84,7 +84,13 @@ namespace FlatFileCheck
             try
             {
                 int iterations = int.Parse(GetNTransformations(date));
-                Console.WriteLine("Iterations: " + iterations);
+                string? latestDateInDb = GetLatestDateFromDb();
+
+                if (DateTime.ParseExact(date, "yyyyMMdd", null) != DateTime.ParseExact(latestDateInDb, "yyyyMMdd", null))
+                {
+                    Console.WriteLine($"Using data from {latestDateInDb} (latest).");
+                    date = latestDateInDb;
+                }
             }
             catch (Exception e)
             {
@@ -215,10 +221,35 @@ namespace FlatFileCheck
             return columnValues;
         }
 
+        private string[] SelectFromTableOrderBy(string tableName, string columnName, string orderBy)
+        {
+            DataTable dt = connection.ExecuteQuery($"SELECT {columnName} FROM {tableName} ORDER BY {orderBy}");
+            if (dt.Rows.Count == 0)
+                throw new DataException($"No data in DB: {tableName}");
+            string[] columnValues = dt.AsEnumerable().Select(x => x[columnName].ToString()).ToArray<string>();
+
+            return columnValues;
+        }
+
         private string? GetNTransformations(string date)
         {
+            /*
             string where = "generatingDate = " + date;
             string[]? values = SelectFromTableWhere("Dane", "nTransformations", where);
+            */
+            string orderBy = "id DESC LIMIT 1";
+            string[]? values = SelectFromTableOrderBy("Dane", "nTransformations", orderBy);
+
+            if (values.Length == 0)
+                return null;
+
+            return values[0];
+        }
+
+        private string? GetLatestDateFromDb()
+        {
+            string orderBy = "id DESC LIMIT 1";
+            string[]? values = SelectFromTableOrderBy("Dane", "generatingDate", orderBy);
 
             if (values.Length == 0)
                 return null;

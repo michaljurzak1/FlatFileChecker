@@ -1,5 +1,6 @@
 ﻿using DatabaseConnection;
 using FlatFileDownload;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -38,9 +39,25 @@ namespace FlatFileCheck
                 if (!factory.IsDataValid(date))
                 {
                     Console.WriteLine("Latest Data in Database is not valid. Do you want to download latest file? [Y/N]");
-                    DownloadOnCmdResponse();
                     
-                    Environment.Exit(1);
+                    if (!DownloadOnCmdResponse())
+                    {
+                        Console.WriteLine("Do you want to proceed with current data? [Y/N]");
+
+                        string? response = Console.ReadLine();
+                        while (response != "Y" && response != "y" && response != "N" && response != "n")
+                        {
+                            Console.WriteLine("Please enter Y or N.");
+                            response = Console.ReadLine();
+                        }
+
+                        if (!(response == "Y" || response == "y"))
+                        {
+                            Console.WriteLine("Exiting.");
+                            Environment.Exit(1);
+                        }
+                    }
+                    //Environment.Exit(1);
                 }
 
                 // Check for size of the database
@@ -74,7 +91,7 @@ namespace FlatFileCheck
             }
         }
 
-        private static void DownloadOnCmdResponse()
+        private static bool DownloadOnCmdResponse() //returns if download was successful
         {
             string? response = Console.ReadLine();
             while (response != "Y" && response != "y" && response != "N" && response != "n")
@@ -86,13 +103,14 @@ namespace FlatFileCheck
             if (response == "Y" || response == "y")
             {
                 Console.WriteLine("Downloading latest file.");
-                Pobieranie.Main(null);
+                return Download.InvokeDownload();
             }
             else
             {
                 Console.WriteLine("Exiting.");
                 Environment.Exit(1);
             }
+            return false;
         }
     }
 }

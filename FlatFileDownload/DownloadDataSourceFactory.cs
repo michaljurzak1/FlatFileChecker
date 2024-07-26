@@ -21,7 +21,7 @@ namespace FlatFileDownload
             Initiate_DB(); //initiates all tables or truncates SPCzynnych, SPZwolnionych, Maski tables
         }
 
-        public void SaveFlatFile(Pobieranie.FlatFile flatfile)
+        public void SaveFlatFile(Download.FlatFile flatfile)
         {
             // before anything need to truncate and update
             TruncateTables();

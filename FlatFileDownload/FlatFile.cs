@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace FlatFileDownload
 {
-    public static partial class Pobieranie
+    public static partial class Download
     {
         public class FlatFile
         {
