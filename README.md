@@ -1,4 +1,4 @@
-# FlatFileChecker - Wykaz Podatników VAT
+# :card_index_dividers: FlatFileChecker - Wykaz Podatników VAT
 
 Program do pobierania i odczytywania lokalnie za pomocą udostępnianego przez Ministerstwo Finansów [pliku płaskiego](https://www.podatki.gov.pl/vat/bezpieczna-transakcja/wykaz-podatnikow-vat/plik-plaski/).
 
@@ -18,7 +18,7 @@ który składa się z konkatenacji łańcuchów: `data + nip + nrb`, dlatego ka�
 
 Cały program wypisuje informacje zwrotne.
 
-## Pobieranie
+## :arrow_down: Pobieranie
 ```
 FlatFileDownload.exe
 ```
@@ -30,7 +30,7 @@ Na końcu, po dodaniu / zamianie danych ustawia pozostałe flagi z kolumny `dele
 
 ![Schemat bazy danych](https://github.com/user-attachments/assets/db74a715-dff3-4808-a569-518a955c8c45)
 
-## Sprawdzanie
+## :white_check_mark: Sprawdzanie
 ```
 FlatFileCheck.exe <NIP (10 znaków)> <Numer Rachunku Bankowego (26 znaków)>
 ```
